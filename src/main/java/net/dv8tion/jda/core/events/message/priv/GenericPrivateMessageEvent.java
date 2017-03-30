@@ -16,7 +16,6 @@
 package net.dv8tion.jda.core.events.message.priv;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
@@ -31,9 +30,9 @@ public abstract class GenericPrivateMessageEvent extends GenericMessageEvent
 {
     protected PrivateChannel channel;
 
-    public GenericPrivateMessageEvent(JDA api, long responseNumber, Message message, PrivateChannel channel)
+    public GenericPrivateMessageEvent(JDA api, long responseNumber, long messageId, PrivateChannel channel)
     {
-        super(api, responseNumber, message);
+        super(api, responseNumber, messageId);
         this.channel = channel;
     }
 

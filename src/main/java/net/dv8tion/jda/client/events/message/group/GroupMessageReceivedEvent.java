@@ -16,13 +16,40 @@
 
 package net.dv8tion.jda.client.events.message.group;
 
+import net.dv8tion.jda.client.entities.Friend;
+import net.dv8tion.jda.client.entities.Relationship;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 
 public class GroupMessageReceivedEvent extends GenericGroupMessageEvent
 {
+
+    private final Message message;
+
     public GroupMessageReceivedEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber, message, message.getGroup());
+        super(api, responseNumber, message.getIdLong(), message.getGroup());
+        this.message = message;
+    }
+
+    public Message getMessage()
+    {
+        return message;
+    }
+
+    public User getAuthor()
+    {
+        return message.getAuthor();
+    }
+
+    public Friend getFriend()
+    {
+        return getJDA().asClient().getFriend(getAuthor());
+    }
+
+    public Relationship getRelationship()
+    {
+        return getJDA().asClient().getRelationship(getAuthor());
     }
 }

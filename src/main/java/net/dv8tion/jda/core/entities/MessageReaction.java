@@ -137,6 +137,16 @@ public class MessageReaction
     }
 
     /**
+     * The message id this reaction is attached to
+     *
+     * @return The message id this reaction is attached to
+     */
+    public long getMessageIdLong()
+    {
+        return messageId;
+    }
+
+    /**
      * Retrieves the {@link net.dv8tion.jda.core.entities.User Users} that
      * already reacted with this MessageReaction.
      * <br>This is an overload of {@link #getUsers(int)} with {@code 100}.

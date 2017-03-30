@@ -57,7 +57,7 @@ public class MessageReactionBulkRemoveHandler extends SocketHandler
         api.getEventManager().handle(
                 new MessageReactionRemoveAllEvent(
                         api, responseNumber,
-                        messageIdString, channel));
+                        messageId, channel));
         return null;
     }
 }

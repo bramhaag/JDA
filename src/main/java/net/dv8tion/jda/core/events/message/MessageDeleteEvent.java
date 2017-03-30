@@ -18,7 +18,6 @@ package net.dv8tion.jda.core.events.message;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
 
 /**
  * <b><u>MessageDeleteEvent</u></b><br>
@@ -26,21 +25,14 @@ import net.dv8tion.jda.core.events.Event;
  * <br>
  * Use: Detect when a Message is deleted. No matter if private or guild.
  */
-public class MessageDeleteEvent extends Event
+public class MessageDeleteEvent extends GenericMessageEvent
 {
-    private final String messageId;
     private final MessageChannel channel;
 
-    public MessageDeleteEvent(JDA api, long responseNumber, String messageId, MessageChannel channel)
+    public MessageDeleteEvent(JDA api, long responseNumber, long messageId, MessageChannel channel)
     {
-        super(api, responseNumber);
-        this.messageId = messageId;
+        super(api, responseNumber, messageId);
         this.channel = channel;
-    }
-
-    public String getMessageId()
-    {
-        return messageId;
     }
 
     public boolean isFromType(ChannelType type)

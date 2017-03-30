@@ -16,6 +16,7 @@
 package net.dv8tion.jda.core.events.message.guild;
 
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 
 /**
@@ -26,8 +27,22 @@ import net.dv8tion.jda.core.entities.Message;
  */
 public class GuildMessageReceivedEvent extends GenericGuildMessageEvent
 {
+
+    private final Message message;
+
     public GuildMessageReceivedEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber, message, message.getTextChannel());
+        super(api, responseNumber, message.getIdLong(), message.getTextChannel());
+        this.message = message;
+    }
+
+    public Message getMessage()
+    {
+        return message;
+    }
+
+    public Member getMember()
+    {
+        return getGuild().getMember(message.getAuthor());
     }
 }

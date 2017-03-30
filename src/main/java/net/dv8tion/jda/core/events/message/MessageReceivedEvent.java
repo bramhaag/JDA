@@ -18,7 +18,6 @@ package net.dv8tion.jda.core.events.message;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
 
 /**
  * <b><u>MessageReceivedEvent</u></b><br>
@@ -26,13 +25,13 @@ import net.dv8tion.jda.core.events.Event;
  * <br>
  * Use: This event indicates that a Message is sent in either a private or guild channel. Providing a MessageChannel and Message.
  */
-public class MessageReceivedEvent extends Event
+public class MessageReceivedEvent extends GenericMessageEvent
 {
     private final Message message;
 
     public MessageReceivedEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber);
+        super(api, responseNumber, message.getIdLong());
         this.message = message;
     }
 

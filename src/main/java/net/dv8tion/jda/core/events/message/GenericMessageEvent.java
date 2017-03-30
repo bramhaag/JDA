@@ -16,8 +16,6 @@
 package net.dv8tion.jda.core.events.message;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.Event;
 
 /**
@@ -29,21 +27,22 @@ import net.dv8tion.jda.core.events.Event;
  */
 public abstract class GenericMessageEvent extends Event
 {
-    protected final Message message;
+    protected final long messageId;
 
-    public GenericMessageEvent(JDA api, long responseNumber, Message message)
+    public GenericMessageEvent(JDA api, long responseNumber, long messageId)
     {
         super(api, responseNumber);
-        this.message = message;
+        this.messageId = messageId;
     }
 
-    public Message getMessage()
+    public String getMessageId()
     {
-        return message;
+        return String.valueOf(messageId);
     }
 
-    public User getAuthor()
+    public long getMessageIdLong()
     {
-        return message == null ? null : getMessage().getAuthor();
+        return messageId;
     }
+
 }

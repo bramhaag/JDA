@@ -18,24 +18,18 @@ package net.dv8tion.jda.core.events.message.react;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
-public class MessageReactionRemoveAllEvent extends Event
+public class MessageReactionRemoveAllEvent extends GenericMessageEvent
 {
 
     protected String messageId;
     protected MessageChannel channel;
 
-    public MessageReactionRemoveAllEvent(JDA api, long responseNumber, String messageId, MessageChannel channel)
+    public MessageReactionRemoveAllEvent(JDA api, long responseNumber, long messageId, MessageChannel channel)
     {
-        super(api, responseNumber);
-        this.messageId = messageId;
+        super(api, responseNumber, messageId);
         this.channel = channel;
-    }
-
-    public String getMessageId()
-    {
-        return messageId;
     }
 
     public MessageChannel getChannel()

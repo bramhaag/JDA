@@ -20,9 +20,9 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
-public class GenericMessageReactionEvent extends Event
+public class GenericMessageReactionEvent extends GenericMessageEvent
 {
 
     protected User issuer;
@@ -30,14 +30,9 @@ public class GenericMessageReactionEvent extends Event
 
     public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber);
+        super(api, responseNumber, reaction.getMessageIdLong());
         this.issuer = user;
         this.reaction = reaction;
-    }
-
-    public String getMessageId()
-    {
-        return reaction.getMessageId();
     }
 
     public MessageChannel getChannel()
