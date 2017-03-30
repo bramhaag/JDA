@@ -16,9 +16,15 @@
 
 package net.dv8tion.jda.core.handle;
 
+import net.dv8tion.jda.client.entities.Group;
+import net.dv8tion.jda.client.events.message.group.react.GroupMessageReactionRemoveAllEvent;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.PrivateChannel;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
+import net.dv8tion.jda.core.events.message.priv.react.PrivateMessageReactionRemoveAllEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveAllEvent;
 import org.json.JSONObject;
 
@@ -54,6 +60,28 @@ public class MessageReactionBulkRemoveHandler extends SocketHandler
             EventCache.LOG.debug("Received a reaction for a channel that JDA does not currently have cached");
             return null;
         }
+
+        switch (channel.getType())
+        {
+            case TEXT:
+                api.getEventManager().handle(
+                        new GuildMessageReactionRemoveAllEvent(
+                                api, responseNumber,
+                                messageId, (TextChannel) channel));
+                break;
+            case PRIVATE:
+                api.getEventManager().handle(
+                        new PrivateMessageReactionRemoveAllEvent(
+                                api, responseNumber,
+                                messageId, (PrivateChannel) channel));
+                break;
+            case GROUP:
+                api.getEventManager().handle(
+                        new GroupMessageReactionRemoveAllEvent(
+                                api, responseNumber,
+                                messageId, (Group) channel));
+        }
+
         api.getEventManager().handle(
                 new MessageReactionRemoveAllEvent(
                         api, responseNumber,

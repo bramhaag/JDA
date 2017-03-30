@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package net.dv8tion.jda.core.events.message.react;
+package net.dv8tion.jda.client.events.message.group.react;
 
+import net.dv8tion.jda.client.entities.Friend;
+import net.dv8tion.jda.client.entities.Group;
+import net.dv8tion.jda.client.entities.Relationship;
+import net.dv8tion.jda.client.events.message.group.GenericGroupMessageEvent;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
-public class GenericMessageReactionEvent extends GenericMessageEvent
+public class GenericGroupMessageReactionEvent extends GenericGroupMessageEvent
 {
+    private final User issuer;
+    private final MessageReaction reaction;
 
-    protected User issuer;
-    protected MessageReaction reaction;
-
-    public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
+    public GenericGroupMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber, reaction.getMessageIdLong());
+        super(api, responseNumber, reaction.getMessageIdLong(), (Group) reaction.getChannel());
         this.issuer = user;
         this.reaction = reaction;
-    }
-
-    public MessageChannel getChannel()
-    {
-        return reaction.getChannel();
     }
 
     public User getUser()
@@ -46,9 +41,14 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
         return issuer;
     }
 
-    public Member getMember()
+    public Friend getFriend()
     {
-        return issuer instanceof Member ? (Member) issuer : null;
+        return getJDA().asClient().getFriend(getUser());
+    }
+
+    public Relationship getRelationship()
+    {
+        return getJDA().asClient().getRelationship(getUser());
     }
 
     public MessageReaction getReaction()

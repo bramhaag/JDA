@@ -14,41 +14,29 @@
  * limitations under the License.
  */
 
-package net.dv8tion.jda.core.events.message.react;
+package net.dv8tion.jda.core.events.message.priv.react;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageReaction;
+import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.core.events.message.priv.GenericPrivateMessageEvent;
 
-public class GenericMessageReactionEvent extends GenericMessageEvent
+public class GenericPrivateMessageReactionEvent extends GenericPrivateMessageEvent
 {
-
     protected User issuer;
     protected MessageReaction reaction;
 
-    public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
+    public GenericPrivateMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber, reaction.getMessageIdLong());
+        super(api, responseNumber, reaction.getMessageIdLong(), (PrivateChannel) reaction.getChannel());
         this.issuer = user;
         this.reaction = reaction;
-    }
-
-    public MessageChannel getChannel()
-    {
-        return reaction.getChannel();
     }
 
     public User getUser()
     {
         return issuer;
-    }
-
-    public Member getMember()
-    {
-        return issuer instanceof Member ? (Member) issuer : null;
     }
 
     public MessageReaction getReaction()
