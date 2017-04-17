@@ -1504,6 +1504,81 @@ public class GuildController
     }
 
     /**
+     * Creates a copy of the specified {@link net.dv8tion.jda.core.entities.Channel Channel}
+     * in this {@link net.dv8tion.jda.core.entities.Guild Guild}.
+     * <br>The provided channel need not be in the same Guild for this to work!
+     *
+     * This copies the following elements:
+     * <ol>
+     *     <li>Name</li>
+     *     <li>Voice Elements
+     *         <ul>
+     *             <li>Bitrate</li>
+     *             <li>Userlimit</li>
+     *         </ul>
+     *     </li>
+     *     <li>Text Elements
+     *         <ul>
+     *             <li>Topic</li>
+     *         </ul>
+     *     </li>
+     *     <li>All permission overrides for
+     *         <ul>
+     *             <li>Members</li>
+     *             <li>Roles</li>
+     *         </ul>
+     *     </li>
+     * </ol>
+     *
+     * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
+     * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
+     * <ul>
+     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     *     <br>The channel could not be created due to a permission discrepancy</li>
+     *
+     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     *     <br>We were removed from the Guild before finishing the task</li>
+     * </ul>
+     *
+     * @param  channel
+     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} to use for the copy template
+     *
+     * @return A specific {@link net.dv8tion.jda.core.requests.restaction.ChannelAction ChannelAction}
+     *         <br>This action allows to set fields for the new Channel before creating it!
+     */
+    public ChannelAction createCopyOfChannel(Channel channel)
+    {
+        Args.notNull(channel, "Channel");
+        checkPermission(Permission.MANAGE_CHANNEL);
+        boolean isVoice = channel instanceof VoiceChannel;
+
+        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.getId());
+        final ChannelAction action = new ChannelAction(route, channel.getName(), guild, isVoice);
+
+        if (isVoice)
+        {
+            VoiceChannel voice = (VoiceChannel) channel;
+            action.setBitrate(voice.getBitrate())
+                  .setUserlimit(voice.getUserLimit());
+        }
+        else
+        {
+            TextChannel text = (TextChannel) channel;
+            action.setTopic(text.getTopic());
+        }
+
+        for (PermissionOverride o : channel.getPermissionOverrides())
+        {
+            if (o.isMemberOverride())
+                action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
+            else
+                action.addPermissionOverride(o.getRole(), o.getAllowedRaw(), o.getDeniedRaw());
+        }
+
+        return action;
+    }
+
+    /**
      * Creates a new {@link net.dv8tion.jda.core.entities.Webhook Webhook} for the specified
      * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      *
